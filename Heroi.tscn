@@ -1,0 +1,192 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Heroi.gd" type="Script" id=1]
+[ext_resource path="res://Characters/Dinossaur.png" type="Texture" id=2]
+[ext_resource path="res://ControlesDeTela.gd" type="Script" id=3]
+[ext_resource path="res://transparentDark/transparentDark19.png" type="Texture" id=4]
+[ext_resource path="res://Jump_03.wav" type="AudioStream" id=5]
+
+[sub_resource type="Animation" id=1]
+
+resource_name = "Hurt"
+length = 0.1
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("HeroSprite/Dinossaur:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 5 ]
+}
+
+[sub_resource type="Animation" id=2]
+
+resource_name = "Idle"
+length = 0.2
+loop = true
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("HeroSprite/Dinossaur:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0, 1 ]
+}
+
+[sub_resource type="Animation" id=3]
+
+resource_name = "Jump"
+length = 0.1
+loop = true
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("HeroSprite/Dinossaur:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 2 ]
+}
+
+[sub_resource type="Animation" id=4]
+
+resource_name = "Walk"
+length = 0.2
+loop = true
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("HeroSprite/Dinossaur:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 2, 3 ]
+}
+
+[sub_resource type="RectangleShape2D" id=5]
+
+custom_solver_bias = 0.0
+extents = Vector2( 8.71666, 21.2716 )
+
+[node name="Heroi" type="KinematicBody2D" groups=[
+"dino",
+]]
+input_pickable = false
+collision_layer = 1
+collision_mask = 1
+collision/safe_margin = 0.08
+motion/sync_to_physics = false
+script = ExtResource( 1 )
+Anim_Walk = "Walk"
+Anim_Idle = "Idle"
+Anim_Jump = "Jump"
+Anim_Hurt = "Hurt"
+Peso = 80
+Velocidade = 500
+
+[node name="HeroSprite" type="Node2D" parent="."]
+editor/display_folded = true
+z_index = 1
+
+[node name="Dinossaur" type="Sprite" parent="HeroSprite"]
+z_index = 1
+texture = ExtResource( 2 )
+hframes = 6
+
+[node name="AnimationController" type="AnimationPlayer" parent="."]
+root_node = NodePath("..")
+autoplay = "Idle"
+playback_process_mode = 1
+playback_default_blend_time = 0.0
+playback_speed = 1.0
+anims/Hurt = SubResource( 1 )
+anims/Idle = SubResource( 2 )
+anims/Jump = SubResource( 3 )
+anims/Walk = SubResource( 4 )
+blend_times = [  ]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( -1.95131, 7.71547 )
+shape = SubResource( 5 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+editor/display_folded = true
+position = Vector2( -472.26, -252.353 )
+anchor_mode = 0
+rotating = false
+current = true
+zoom = Vector2( 1, 1 )
+limit_left = -10000000
+limit_top = -10000000
+limit_right = 10000000
+limit_bottom = 10000000
+limit_smoothed = false
+drag_margin_h_enabled = true
+drag_margin_v_enabled = true
+smoothing_enabled = false
+smoothing_speed = 5.0
+offset_v = 0.0
+offset_h = 0.0
+drag_margin_left = 0.2
+drag_margin_top = 0.2
+drag_margin_right = 0.2
+drag_margin_bottom = 0.2
+editor_draw_screen = true
+editor_draw_limits = false
+editor_draw_drag_margin = false
+
+[node name="ControlesDeTela" type="Control" parent="Camera2D"]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+rect_scale = Vector2( 1.5, 1.5 )
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+script = ExtResource( 3 )
+
+[node name="Salto" type="TouchScreenButton" parent="Camera2D/ControlesDeTela"]
+position = Vector2( 615.385, 328.747 )
+scale = Vector2( 1.2, 1.2 )
+normal = ExtResource( 4 )
+pressed = null
+bitmask = null
+shape = null
+shape_centered = true
+shape_visible = true
+passby_press = true
+action = "ui_up"
+visibility_mode = 0
+
+[node name="Jump" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 5 )
+volume_db = 0.0
+pitch_scale = 1.0
+autoplay = false
+stream_paused = false
+mix_target = 0
+bus = "Master"
+
